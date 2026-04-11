@@ -1,0 +1,102 @@
+// ClearSAR — SAR backlog clearance database schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  accessToken   String // encrypted at application layer
+  refreshToken  String // encrypted at application layer
+  tokenExpiry   DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sars      Sar[]
+  templates Template[]
+}
+
+model Sar {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Source email
+  outlookMessageId String   @unique
+  requesterName    String
+  requesterEmail   String
+  subject          String
+  receivedDate     DateTime
+  emailBody        String
+
+  // Calculated deadlines
+  dueDate          DateTime
+  extensionApplied Boolean   @default(false)
+  extendedDueDate  DateTime?
+
+  // Workflow
+  status      String @default("identified")
+  currentStep Int    @default(0)
+
+  // AI metadata
+  aiClassificationScore Float?
+  aiDraftResponse       String?
+  aiDraftSubject        String?
+  templateUsed          String?
+
+  // Lifecycle timestamps
+  acknowledgedAt  DateTime?
+  dataRequestedAt DateTime?
+  dataCollectedAt DateTime?
+  responseSentAt  DateTime?
+  completedAt     DateTime?
+
+  // Metadata
+  sarType         String?
+  department      String?
+  complexity      String?
+  isVexatious     Boolean @default(false)
+  exemptionReason String?
+  notes           String?
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  activities Activity[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model Template {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  type      String
+  subject   String
+  body      String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, type])
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  sarId     String
+  sar       Sar      @relation(fields: [sarId], references: [id], onDelete: Cascade)
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([sarId])
+}

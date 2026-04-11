@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Thin, subtle scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Common utility classes */
+.hairline {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.hairline-b {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hairline-t {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass {
+  background: rgba(20, 20, 20, 0.72);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+}
+
+.pill {
+  @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200;
+}
+
+.pill-primary {
+  @apply bg-white text-black hover:bg-white/90 active:scale-[0.98];
+}
+
+.pill-secondary {
+  @apply border border-white/15 bg-white/5 text-white hover:bg-white/10 active:scale-[0.98];
+}
+
+.pill-ghost {
+  @apply text-white/60 hover:text-white transition-colors;
+}
+
+.tag {
+  @apply inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-white/70;
+}
+
+.card {
+  @apply rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6;
+}
+
+.stat-label {
+  @apply text-[11px] font-medium uppercase tracking-[0.12em] text-white/50;
+}
+
+.stat-value {
+  @apply mt-2 text-5xl font-semibold tracking-tight text-white;
+}
+
+.stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.00s; }
+.stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger > *:nth-child(6) { animation-delay: 0.25s; }
+.stagger > *:nth-child(7) { animation-delay: 0.30s; }
+.stagger > *:nth-child(8) { animation-delay: 0.35s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Textarea reset */
+textarea,
+input {
+  color-scheme: dark;
+}
