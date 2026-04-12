@@ -43,16 +43,20 @@ export async function GET(req: NextRequest) {
       params.set("code_verifier", session.oauthVerifier);
     }
 
+    const body = params.toString();
+    // Log the encoded body to check if ~ is being mangled
+    const secretInBody = body.match(/client_secret=([^&]*)/)?.[1] ?? "NOT FOUND";
     console.log("[callback] Attempting direct token exchange...");
     console.log("[callback] tokenUrl:", tokenUrl);
     console.log("[callback] client_id:", clientId);
-    console.log("[callback] secret length:", clientSecret.length);
+    console.log("[callback] secret raw:", clientSecret);
+    console.log("[callback] secret URL-encoded in body:", secretInBody);
     console.log("[callback] redirect_uri:", redirectUri);
 
     const tokenRes = await fetch(tokenUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString(),
+      body,
     });
 
     const tokenData = await tokenRes.json();
