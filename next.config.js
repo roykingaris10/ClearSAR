@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ['@prisma/client', '@azure/msal-node'],
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client', '@azure/msal-node'],
+  },
 };
 
 module.exports = nextConfig;
