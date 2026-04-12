@@ -9,13 +9,9 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: [
+          "Inter",
+          "system-ui",
           "-apple-system",
-          "BlinkMacSystemFont",
-          "SF Pro Display",
-          "SF Pro Text",
-          "Helvetica Neue",
-          "Helvetica",
-          "Arial",
           "sans-serif",
         ],
       },

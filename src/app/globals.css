@@ -11,46 +11,45 @@
   --ink-subtle: #9a9aa0;
   --azure: #0078ff;
   --azure-soft: #eaf4ff;
-  --hairline: rgba(10, 10, 10, 0.08);
+  --hairline: rgba(10, 10, 10, 0.07);
 }
 
 html,
 body {
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(0, 120, 255, 0.08), transparent 60%),
-    radial-gradient(900px 500px at 10% 110%, rgba(0, 120, 255, 0.05), transparent 60%),
+    radial-gradient(1200px 600px at 85% -10%, rgba(0, 120, 255, 0.06), transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, rgba(0, 120, 255, 0.04), transparent 60%),
     var(--canvas);
   background-attachment: fixed;
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-    "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.011em;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 ::selection {
-  background: rgba(0, 120, 255, 0.18);
+  background: rgba(0, 120, 255, 0.15);
   color: var(--ink);
 }
 
 /* Thin, subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(10, 10, 10, 0.12);
+  background: rgba(10, 10, 10, 0.10);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(10, 10, 10, 0.22);
+  background: rgba(10, 10, 10, 0.20);
 }
 
-/* Common utility classes */
+/* Hairline borders */
 .hairline {
   border-color: var(--hairline);
 }
@@ -61,15 +60,15 @@ body {
   border-top: 1px solid var(--hairline);
 }
 
-/* Subtle frosted glass surface */
+/* Frosted glass surfaces */
 .glass {
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 10px 40px rgba(15, 23, 42, 0.06);
+    0 1px 3px rgba(15, 23, 42, 0.03),
+    0 8px 30px rgba(15, 23, 42, 0.05);
 }
 
 .glass-soft {
@@ -85,78 +84,91 @@ body {
   border-bottom: 1px solid var(--hairline);
 }
 
+/* Buttons */
 .pill {
-  @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200;
+  @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-200;
 }
 
 .pill-primary {
-  @apply bg-azure-500 text-white hover:bg-azure-600 active:scale-[0.98] shadow-azure-glow;
+  @apply bg-azure-500 text-white hover:bg-azure-600 active:scale-[0.98];
+  box-shadow: 0 1px 2px rgba(0, 120, 255, 0.3), 0 4px 16px rgba(0, 120, 255, 0.15);
+}
+.pill-primary:hover {
+  box-shadow: 0 1px 2px rgba(0, 120, 255, 0.35), 0 6px 24px rgba(0, 120, 255, 0.2);
 }
 
 .pill-secondary {
-  @apply border border-ink/10 bg-white/70 text-ink backdrop-blur hover:bg-white active:scale-[0.98];
+  @apply border border-ink/[0.08] bg-white/80 text-ink backdrop-blur hover:bg-white hover:border-ink/[0.12] active:scale-[0.98];
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .pill-ghost {
   @apply text-ink-muted hover:text-ink transition-colors;
 }
 
+/* Tags & badges */
 .tag {
-  @apply inline-flex items-center rounded-full border border-ink/10 bg-white/60 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-ink-muted backdrop-blur;
+  @apply inline-flex items-center rounded-full border border-ink/[0.08] bg-white/60 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-ink-muted backdrop-blur;
 }
 
 .tag-azure {
-  @apply inline-flex items-center rounded-full border border-azure-200 bg-azure-50 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-azure-700;
+  @apply inline-flex items-center rounded-full border border-azure-200/60 bg-azure-50/80 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-azure-700;
 }
 
+/* Cards */
 .card {
-  @apply rounded-2xl border border-ink/[0.06] bg-white/70 p-6 backdrop-blur-xl shadow-card;
+  @apply rounded-2xl border border-ink/[0.06] bg-white/70 p-6 backdrop-blur-xl;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 .card-solid {
-  @apply rounded-2xl border border-ink/[0.06] bg-surface p-6 shadow-card;
+  @apply rounded-2xl border border-ink/[0.06] bg-surface p-6;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
+/* Labels */
 .stat-label {
-  @apply text-[11px] font-medium uppercase tracking-[0.12em] text-ink-subtle;
+  @apply text-[11px] font-medium uppercase tracking-[0.1em] text-ink-subtle;
 }
 
 .stat-value {
   @apply mt-2 text-5xl font-semibold tracking-tight text-ink;
 }
 
+/* Inputs */
 .input-field {
-  @apply w-full rounded-xl border border-ink/10 bg-white/80 px-4 py-3 text-sm text-ink placeholder:text-ink-subtle focus:border-azure-400 focus:outline-none focus:ring-2 focus:ring-azure-100 transition-colors;
+  @apply w-full rounded-xl border border-ink/[0.08] bg-white/80 px-4 py-3 text-sm text-ink placeholder:text-ink-subtle/60 focus:border-azure-400 focus:outline-none focus:ring-2 focus:ring-azure-100 transition-colors;
 }
 
-/* ClearSAR wordmark — matches the attached logo */
+/* ClearSAR wordmark — matches the logo: light-weight azure blue text */
 .logo-wordmark {
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--azure);
-  background: linear-gradient(180deg, #0a86ff 0%, #0066db 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #1a9eff;
 }
 
+/* Staggered entrance animation */
 .stagger > * {
   opacity: 0;
-  animation: fadeInUp 0.6s ease-out forwards;
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 .stagger > *:nth-child(1) { animation-delay: 0.00s; }
-.stagger > *:nth-child(2) { animation-delay: 0.05s; }
-.stagger > *:nth-child(3) { animation-delay: 0.10s; }
-.stagger > *:nth-child(4) { animation-delay: 0.15s; }
-.stagger > *:nth-child(5) { animation-delay: 0.20s; }
-.stagger > *:nth-child(6) { animation-delay: 0.25s; }
-.stagger > *:nth-child(7) { animation-delay: 0.30s; }
-.stagger > *:nth-child(8) { animation-delay: 0.35s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger > *:nth-child(4) { animation-delay: 0.18s; }
+.stagger > *:nth-child(5) { animation-delay: 0.24s; }
+.stagger > *:nth-child(6) { animation-delay: 0.30s; }
+.stagger > *:nth-child(7) { animation-delay: 0.36s; }
+.stagger > *:nth-child(8) { animation-delay: 0.42s; }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -169,4 +181,10 @@ textarea,
 input,
 select {
   color-scheme: light;
+}
+
+/* Focus visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 2px;
 }

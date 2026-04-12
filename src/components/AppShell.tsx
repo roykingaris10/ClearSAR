@@ -22,23 +22,13 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
 
   return (
     <div className="relative min-h-screen text-ink">
-      {/* Decorative azure glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-azure-200/30 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed -bottom-40 left-[-10%] h-[480px] w-[480px] rounded-full bg-azure-100/40 blur-3xl"
-      />
-
       <header className="glass-nav sticky top-0 z-30">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4">
-          <Link href="/dashboard" className="flex items-center">
-            <Logo size="md" />
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-4">
+          <Link href="/dashboard">
+            <Logo size="sm" />
           </Link>
 
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-0.5">
             {NAV.map((item) => {
               const active =
                 pathname === item.href || pathname?.startsWith(item.href + "/");
@@ -46,10 +36,10 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all ${
                     active
-                      ? "bg-azure-500 text-white shadow-azure-glow"
-                      : "text-ink-muted hover:bg-white/60 hover:text-ink"
+                      ? "bg-ink text-white"
+                      : "text-ink-muted hover:text-ink hover:bg-black/[0.04]"
                   }`}
                 >
                   {item.label}
@@ -58,16 +48,16 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
             })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="hidden text-right sm:block">
-              <div className="text-xs font-medium text-ink">
+              <div className="text-[13px] font-medium text-ink">
                 {userName ?? "DPO"}
               </div>
-              <div className="text-[10px] text-ink-subtle">{userEmail}</div>
+              <div className="text-[11px] text-ink-subtle">{userEmail}</div>
             </div>
             <a
               href="/api/auth/logout"
-              className="text-xs text-ink-subtle hover:text-ink"
+              className="pill-ghost text-[13px]"
             >
               Sign out
             </a>
@@ -75,7 +65,7 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-7xl px-8 py-10">{children}</main>
+      <main className="relative mx-auto max-w-6xl px-8 py-10">{children}</main>
     </div>
   );
 }

@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "ClearSAR — Subject Access Request backlog clearance",
@@ -14,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-canvas text-ink antialiased">
+      <body className={`${inter.className} min-h-screen bg-canvas text-ink antialiased`}>
         {children}
       </body>
     </html>

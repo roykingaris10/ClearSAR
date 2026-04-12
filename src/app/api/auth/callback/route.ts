@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMsalClient, getRedirectUri, GRAPH_SCOPES } from "@/lib/auth";
+import { getRedirectUri, GRAPH_SCOPES } from "@/lib/auth";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { encryptToken } from "@/lib/crypto";
@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Try direct token exchange first to diagnose MSAL issues
     const tenantId = process.env.AZURE_TENANT_ID ?? "common";
     const clientId = process.env.AZURE_CLIENT_ID!;
     const clientSecret = process.env.AZURE_CLIENT_SECRET!;
@@ -38,37 +37,24 @@ export async function GET(req: NextRequest) {
       scope: GRAPH_SCOPES.join(" "),
     });
 
-    // Add PKCE code verifier if available
     if (session.oauthVerifier) {
       params.set("code_verifier", session.oauthVerifier);
     }
 
-    const body = params.toString();
-    // Log the encoded body to check if ~ is being mangled
-    const secretInBody = body.match(/client_secret=([^&]*)/)?.[1] ?? "NOT FOUND";
-    console.log("[callback] Attempting direct token exchange...");
-    console.log("[callback] tokenUrl:", tokenUrl);
-    console.log("[callback] client_id:", clientId);
-    console.log("[callback] secret raw:", clientSecret);
-    console.log("[callback] secret URL-encoded in body:", secretInBody);
-    console.log("[callback] redirect_uri:", redirectUri);
-
     const tokenRes = await fetch(tokenUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
+      body: params.toString(),
     });
 
     const tokenData = await tokenRes.json();
 
     if (!tokenRes.ok) {
-      console.error("[callback] Token exchange failed:", JSON.stringify(tokenData, null, 2));
+      console.error("[callback] Token exchange failed:", tokenData.error_description ?? tokenData.error);
       return NextResponse.redirect(
-        new URL(`/?error=callback_failed&detail=${encodeURIComponent(JSON.stringify(tokenData))}`, req.url)
+        new URL(`/?error=callback_failed&detail=${encodeURIComponent(tokenData.error_description ?? tokenData.error)}`, req.url)
       );
     }
-
-    console.log("[callback] Token exchange succeeded!");
 
     const accessToken = tokenData.access_token;
     const refreshToken = tokenData.refresh_token ?? "";
@@ -110,7 +96,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(new URL("/dashboard", req.url));
   } catch (err: any) {
-    console.error("[callback] Exception:", err);
+    console.error("[callback] Exception:", err.message);
     return NextResponse.redirect(
       new URL(`/?error=callback_failed&detail=${encodeURIComponent(err.message)}`, req.url)
     );

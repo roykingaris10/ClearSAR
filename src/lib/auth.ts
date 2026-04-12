@@ -26,11 +26,6 @@ function getMsalConfig(): Configuration {
     );
   }
 
-  // Debug: log secret shape (remove after fixing auth)
-  console.log(`[auth] clientId=${clientId}`);
-  console.log(`[auth] secret length=${clientSecret.length}, starts="${clientSecret.slice(0, 6)}", ends="${clientSecret.slice(-4)}"`);
-  console.log(`[auth] tenantId=${tenantId}`);
-
   return {
     auth: {
       clientId,
