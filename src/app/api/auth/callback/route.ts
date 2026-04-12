@@ -22,42 +22,76 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const msal = getMsalClient();
-    const result = await msal.acquireTokenByCode({
+    // Try direct token exchange first to diagnose MSAL issues
+    const tenantId = process.env.AZURE_TENANT_ID ?? "common";
+    const clientId = process.env.AZURE_CLIENT_ID!;
+    const clientSecret = process.env.AZURE_CLIENT_SECRET!;
+    const redirectUri = getRedirectUri();
+
+    const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+    const params = new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
       code,
-      scopes: GRAPH_SCOPES,
-      redirectUri: getRedirectUri(),
-      codeVerifier: session.oauthVerifier,
+      redirect_uri: redirectUri,
+      grant_type: "authorization_code",
+      scope: GRAPH_SCOPES.join(" "),
     });
 
-    if (!result?.accessToken || !result.account) {
-      return NextResponse.redirect(new URL("/?error=token_failed", req.url));
+    // Add PKCE code verifier if available
+    if (session.oauthVerifier) {
+      params.set("code_verifier", session.oauthVerifier);
     }
 
-    // MSAL Node does not return refresh_token directly — it keeps it in its
-    // token cache. We read it from the in-memory cache for the account.
-    const cache = msal.getTokenCache();
-    const serialized = JSON.parse(cache.serialize());
-    const refreshToken = extractRefreshToken(serialized) ?? "";
+    console.log("[callback] Attempting direct token exchange...");
+    console.log("[callback] tokenUrl:", tokenUrl);
+    console.log("[callback] client_id:", clientId);
+    console.log("[callback] secret length:", clientSecret.length);
+    console.log("[callback] redirect_uri:", redirectUri);
 
-    const email =
-      result.account.username || (result.idTokenClaims as any)?.preferred_username;
-    const name = result.account.name ?? email;
+    const tokenRes = await fetch(tokenUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+
+    const tokenData = await tokenRes.json();
+
+    if (!tokenRes.ok) {
+      console.error("[callback] Token exchange failed:", JSON.stringify(tokenData, null, 2));
+      return NextResponse.redirect(
+        new URL(`/?error=callback_failed&detail=${encodeURIComponent(JSON.stringify(tokenData))}`, req.url)
+      );
+    }
+
+    console.log("[callback] Token exchange succeeded!");
+
+    const accessToken = tokenData.access_token;
+    const refreshToken = tokenData.refresh_token ?? "";
+
+    // Get user info from Microsoft Graph
+    const meRes = await fetch("https://graph.microsoft.com/v1.0/me", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const me = await meRes.json();
+
+    const email = me.mail || me.userPrincipalName;
+    const name = me.displayName ?? email;
 
     const user = await prisma.user.upsert({
       where: { email },
       update: {
         name,
-        accessToken: encryptToken(result.accessToken),
+        accessToken: encryptToken(accessToken),
         refreshToken: encryptToken(refreshToken),
-        tokenExpiry: result.expiresOn ?? new Date(Date.now() + 3600 * 1000),
+        tokenExpiry: new Date(Date.now() + (tokenData.expires_in ?? 3600) * 1000),
       },
       create: {
         email,
         name,
-        accessToken: encryptToken(result.accessToken),
+        accessToken: encryptToken(accessToken),
         refreshToken: encryptToken(refreshToken),
-        tokenExpiry: result.expiresOn ?? new Date(Date.now() + 3600 * 1000),
+        tokenExpiry: new Date(Date.now() + (tokenData.expires_in ?? 3600) * 1000),
       },
     });
 
@@ -72,15 +106,9 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(new URL("/dashboard", req.url));
   } catch (err: any) {
+    console.error("[callback] Exception:", err);
     return NextResponse.redirect(
       new URL(`/?error=callback_failed&detail=${encodeURIComponent(err.message)}`, req.url)
     );
   }
-}
-
-function extractRefreshToken(cache: any): string | null {
-  if (!cache?.RefreshToken) return null;
-  const tokens = Object.values(cache.RefreshToken) as any[];
-  if (tokens.length === 0) return null;
-  return tokens[0].secret ?? null;
 }
