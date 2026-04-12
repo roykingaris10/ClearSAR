@@ -3,13 +3,25 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --canvas: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #0a0a0a;
+  --ink-muted: #6b6b70;
+  --ink-subtle: #9a9aa0;
+  --azure: #0078ff;
+  --azure-soft: #eaf4ff;
+  --hairline: rgba(10, 10, 10, 0.08);
 }
 
 html,
 body {
-  background: #000;
-  color: #fff;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(0, 120, 255, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, rgba(0, 120, 255, 0.05), transparent 60%),
+    var(--canvas);
+  background-attachment: fixed;
+  color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,7 +30,8 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 120, 255, 0.18);
+  color: var(--ink);
 }
 
 /* Thin, subtle scrollbar */
@@ -30,28 +43,46 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.12);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(10, 10, 10, 0.22);
 }
 
 /* Common utility classes */
 .hairline {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--hairline);
 }
 .hairline-b {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--hairline);
 }
 .hairline-t {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--hairline);
 }
 
+/* Subtle frosted glass surface */
 .glass {
-  background: rgba(20, 20, 20, 0.72);
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 10px 40px rgba(15, 23, 42, 0.06);
+}
+
+.glass-soft {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+}
+
+.glass-nav {
+  background: rgba(244, 245, 247, 0.72);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  border-bottom: 1px solid var(--hairline);
 }
 
 .pill {
@@ -59,31 +90,54 @@ body {
 }
 
 .pill-primary {
-  @apply bg-white text-black hover:bg-white/90 active:scale-[0.98];
+  @apply bg-azure-500 text-white hover:bg-azure-600 active:scale-[0.98] shadow-azure-glow;
 }
 
 .pill-secondary {
-  @apply border border-white/15 bg-white/5 text-white hover:bg-white/10 active:scale-[0.98];
+  @apply border border-ink/10 bg-white/70 text-ink backdrop-blur hover:bg-white active:scale-[0.98];
 }
 
 .pill-ghost {
-  @apply text-white/60 hover:text-white transition-colors;
+  @apply text-ink-muted hover:text-ink transition-colors;
 }
 
 .tag {
-  @apply inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-white/70;
+  @apply inline-flex items-center rounded-full border border-ink/10 bg-white/60 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-ink-muted backdrop-blur;
+}
+
+.tag-azure {
+  @apply inline-flex items-center rounded-full border border-azure-200 bg-azure-50 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-azure-700;
 }
 
 .card {
-  @apply rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6;
+  @apply rounded-2xl border border-ink/[0.06] bg-white/70 p-6 backdrop-blur-xl shadow-card;
+}
+
+.card-solid {
+  @apply rounded-2xl border border-ink/[0.06] bg-surface p-6 shadow-card;
 }
 
 .stat-label {
-  @apply text-[11px] font-medium uppercase tracking-[0.12em] text-white/50;
+  @apply text-[11px] font-medium uppercase tracking-[0.12em] text-ink-subtle;
 }
 
 .stat-value {
-  @apply mt-2 text-5xl font-semibold tracking-tight text-white;
+  @apply mt-2 text-5xl font-semibold tracking-tight text-ink;
+}
+
+.input-field {
+  @apply w-full rounded-xl border border-ink/10 bg-white/80 px-4 py-3 text-sm text-ink placeholder:text-ink-subtle focus:border-azure-400 focus:outline-none focus:ring-2 focus:ring-azure-100 transition-colors;
+}
+
+/* ClearSAR wordmark — matches the attached logo */
+.logo-wordmark {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--azure);
+  background: linear-gradient(180deg, #0a86ff 0%, #0066db 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .stagger > * {
@@ -110,8 +164,9 @@ body {
   }
 }
 
-/* Textarea reset */
+/* Input color scheme */
 textarea,
-input {
-  color-scheme: dark;
+input,
+select {
+  color-scheme: light;
 }

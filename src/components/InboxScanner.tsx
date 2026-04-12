@@ -98,21 +98,23 @@ export function InboxScanner() {
     <div className="space-y-6">
       <div className="card flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="text-sm font-medium">Connected to your Outlook</div>
+          <div className="text-sm font-medium text-ink">
+            Connected to your Outlook
+          </div>
           {results && (
-            <div className="mt-1 text-xs text-white/50">
-              Scanned {results.length} messages · {sarCount} SARs detected ·{" "}
-              {possibleCount} possible
+            <div className="mt-1 text-xs text-ink-subtle">
+              Scanned {results.length} messages &middot; {sarCount} SARs
+              detected &middot; {possibleCount} possible
             </div>
           )}
         </div>
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-xs text-white/50">
+          <label className="flex items-center gap-2 text-xs text-ink-subtle">
             Scan
             <select
               value={top}
               onChange={(e) => setTop(Number(e.target.value))}
-              className="rounded-full border border-white/15 bg-black px-3 py-1 text-xs text-white"
+              className="input-field w-auto rounded-full px-3 py-1 text-xs"
             >
               <option value={10}>10</option>
               <option value={25}>25</option>
@@ -132,19 +134,19 @@ export function InboxScanner() {
       </div>
 
       {error && (
-        <div className="rounded-2xl border border-white/20 bg-white/[0.02] p-4 text-sm text-white/70">
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {error}
         </div>
       )}
 
       {loading && (
-        <div className="card text-center text-sm text-white/50">
+        <div className="card text-center text-sm text-ink-muted">
           Reading your mailbox and classifying each message...
         </div>
       )}
 
       {results && visible.length === 0 && !loading && (
-        <div className="card text-center text-sm text-white/50">
+        <div className="card text-center text-sm text-ink-muted">
           No messages to review. Try scanning more messages.
         </div>
       )}
@@ -157,45 +159,48 @@ export function InboxScanner() {
           return (
             <div
               key={r.message.id}
-              className={`rounded-2xl border p-6 transition-all ${
+              className={`rounded-2xl border p-6 backdrop-blur transition-all ${
                 isSar
-                  ? "border-white/20 bg-white/[0.03]"
-                  : "border-white/[0.08] bg-white/[0.01]"
+                  ? "border-azure-200 bg-azure-50/40"
+                  : "border-ink/[0.06] bg-white/70"
               }`}
             >
               <div className="flex items-start justify-between gap-6">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="tag">
+                    <span className={isSar ? "tag-azure" : "tag"}>
                       {isSar
                         ? `SAR · ${confidencePct}%`
                         : `Not SAR · ${confidencePct}%`}
                     </span>
                     {r.classification.sar_type && (
-                      <span className="tag">{r.classification.sar_type}</span>
+                      <span className="tag-azure">
+                        {r.classification.sar_type}
+                      </span>
                     )}
                   </div>
-                  <div className="mt-3 truncate text-base font-medium">
+                  <div className="mt-3 truncate text-base font-medium text-ink">
                     {r.message.subject}
                   </div>
-                  <div className="mt-1 text-xs text-white/50">
-                    From {r.message.fromName} · {r.message.fromEmail} ·{" "}
+                  <div className="mt-1 text-xs text-ink-subtle">
+                    From {r.message.fromName} &middot; {r.message.fromEmail}{" "}
+                    &middot;{" "}
                     {new Date(r.message.receivedDate).toLocaleDateString(
                       "en-GB"
                     )}
                   </div>
-                  <p className="mt-3 line-clamp-2 text-sm text-white/60">
+                  <p className="mt-3 line-clamp-2 text-sm text-ink-muted">
                     {r.message.bodyPreview}
                   </p>
                   {r.classification.reasoning && (
-                    <p className="mt-3 text-xs italic text-white/40">
+                    <p className="mt-3 text-xs italic text-ink-subtle">
                       AI: {r.classification.reasoning}
                     </p>
                   )}
                 </div>
                 <div className="flex shrink-0 flex-col gap-2">
                   {added ? (
-                    <span className="pill border border-white/20 text-xs text-white/60">
+                    <span className="pill border border-azure-200 bg-azure-50 text-xs text-azure-700">
                       Added to queue
                     </span>
                   ) : (

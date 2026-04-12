@@ -63,14 +63,14 @@ export default async function DashboardPage() {
         <section>
           <div className="stat-label">Total SARs overdue</div>
           <div className="mt-3 flex items-end gap-6">
-            <div className="text-[120px] font-semibold leading-none tracking-tight">
+            <div className="text-[120px] font-semibold leading-none tracking-tight text-ink">
               {overdueSars.length}
             </div>
             <div className="pb-4">
-              <div className="text-sm text-white/60">
+              <div className="text-sm text-ink-muted">
                 of {open.length} open requests
               </div>
-              <div className="mt-1 text-xs text-white/40">
+              <div className="mt-1 text-xs text-ink-subtle">
                 Average {avgOverdueDays} days past deadline
               </div>
             </div>
@@ -82,27 +82,30 @@ export default async function DashboardPage() {
           <div className="flex items-start justify-between gap-6">
             <div>
               <div className="stat-label">ICO risk assessment</div>
-              <div className="mt-3 text-3xl font-semibold tracking-tight">
+              <div className="mt-3 text-3xl font-semibold tracking-tight text-ink">
                 {icoRisk.level} — {icoRisk.label}
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60">
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-muted">
                 {icoRisk.description}
               </p>
             </div>
             <div className="text-right">
               <div className="stat-label">Severely overdue</div>
-              <div className="mt-2 text-4xl font-semibold">
+              <div className="mt-2 text-4xl font-semibold text-ink">
                 {buckets["90+"]}
               </div>
-              <div className="text-xs text-white/40">90+ days</div>
+              <div className="text-xs text-ink-subtle">90+ days</div>
             </div>
           </div>
         </section>
 
         {/* Metrics grid */}
-        <section className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/[0.08] sm:grid-cols-4">
+        <section className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-ink/[0.06] bg-ink/[0.06] shadow-card sm:grid-cols-4">
           <Metric label="Open" value={open.length} />
-          <Metric label="Drafts ready" value={sars.filter((s) => s.status === "draft_ready").length} />
+          <Metric
+            label="Drafts ready"
+            value={sars.filter((s) => s.status === "draft_ready").length}
+          />
           <Metric label="Sent this week" value={completedThisWeek} />
           <Metric
             label="Most overdue"
@@ -120,12 +123,14 @@ export default async function DashboardPage() {
               {(["90+", "60-89", "30-59", "1-29"] as const).map((band) => (
                 <div key={band}>
                   <div className="flex items-baseline justify-between text-sm">
-                    <span className="text-white/60">{band} days</span>
-                    <span className="font-medium">{buckets[band]}</span>
+                    <span className="text-ink-muted">{band} days</span>
+                    <span className="font-medium text-ink">
+                      {buckets[band]}
+                    </span>
                   </div>
-                  <div className="mt-2 h-[2px] w-full overflow-hidden bg-white/[0.08]">
+                  <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-ink/[0.06]">
                     <div
-                      className="h-full bg-white transition-all duration-700"
+                      className="h-full rounded-full bg-azure-500 transition-all duration-700"
                       style={{
                         width: `${(buckets[band] / maxBucket) * 100}%`,
                       }}
@@ -138,24 +143,24 @@ export default async function DashboardPage() {
 
           <div className="card">
             <div className="stat-label">Clearance projection</div>
-            <p className="mt-3 text-sm text-white/60">
+            <p className="mt-3 text-sm text-ink-muted">
               Time to clear the current backlog at a steady rate.
             </p>
             <div className="mt-6 space-y-3">
               {projections.map((p) => (
                 <div
                   key={p.rate}
-                  className="flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3"
+                  className="flex items-center justify-between rounded-xl border border-ink/[0.06] bg-white/60 px-4 py-3 backdrop-blur"
                 >
                   <div>
-                    <div className="text-sm font-medium">
+                    <div className="text-sm font-medium text-ink">
                       {p.rate} {p.rate === 1 ? "SAR" : "SARs"} / day
                     </div>
-                    <div className="text-[11px] text-white/40">
+                    <div className="text-[11px] text-ink-subtle">
                       {p.days} working days
                     </div>
                   </div>
-                  <div className="text-sm text-white/60">
+                  <div className="text-sm text-ink-muted">
                     Clear by {formatUkDate(p.date)}
                   </div>
                 </div>
@@ -170,32 +175,32 @@ export default async function DashboardPage() {
             <div className="stat-label">Most critical SAR</div>
             <Link
               href={`/sar/${mostOverdue.id}`}
-              className="group mt-3 block rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-all hover:border-white/20 hover:bg-white/[0.04]"
+              className="group mt-3 block rounded-2xl border border-ink/[0.06] bg-white/70 p-6 shadow-card backdrop-blur-xl transition-all hover:border-azure-300 hover:bg-white"
             >
               <div className="flex items-start justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-3">
                     <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-azure-500 opacity-60" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-azure-500" />
                     </span>
-                    <span className="text-2xl font-semibold tracking-tight">
+                    <span className="text-2xl font-semibold tracking-tight text-ink">
                       {mostOverdue.requesterName}
                     </span>
                   </div>
-                  <div className="mt-1 text-sm text-white/50">
+                  <div className="mt-1 text-sm text-ink-muted">
                     {mostOverdue.requesterEmail}
                   </div>
-                  <div className="mt-3 text-xs text-white/40">
+                  <div className="mt-3 text-xs text-ink-subtle">
                     Received {formatUkDate(mostOverdue.receivedDate)} · Due{" "}
                     {formatUkDate(mostOverdue.dueDate)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-semibold tracking-tight">
+                  <div className="text-4xl font-semibold tracking-tight text-ink">
                     {mostOverdue._overdue}
                   </div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/40">
+                  <div className="text-[11px] uppercase tracking-wider text-ink-subtle">
                     days overdue
                   </div>
                 </div>
@@ -222,17 +227,22 @@ function Metric({
   href?: string;
 }) {
   const inner = (
-    <div className="bg-black p-8">
+    <div className="bg-white/80 p-8 backdrop-blur">
       <div className="stat-label">{label}</div>
-      <div className="mt-4 text-4xl font-semibold tracking-tight">{value}</div>
+      <div className="mt-4 text-4xl font-semibold tracking-tight text-ink">
+        {value}
+      </div>
       {sub && (
-        <div className="mt-1 truncate text-xs text-white/40">{sub}</div>
+        <div className="mt-1 truncate text-xs text-ink-subtle">{sub}</div>
       )}
     </div>
   );
   if (href) {
     return (
-      <Link href={href} className="block transition-colors hover:bg-white/[0.02]">
+      <Link
+        href={href}
+        className="block transition-colors hover:bg-azure-50/60"
+      >
         {inner}
       </Link>
     );
@@ -244,10 +254,10 @@ function EmptyState() {
   return (
     <section className="card text-center">
       <div className="stat-label">Nothing to show yet</div>
-      <h3 className="mt-3 text-2xl font-semibold tracking-tight">
+      <h3 className="mt-3 text-2xl font-semibold tracking-tight text-ink">
         Scan your inbox to get started.
       </h3>
-      <p className="mx-auto mt-3 max-w-md text-sm text-white/60">
+      <p className="mx-auto mt-3 max-w-md text-sm text-ink-muted">
         ClearSAR reads your Outlook inbox, identifies Subject Access Requests,
         and adds them to your queue.
       </p>
@@ -292,8 +302,8 @@ function calculateIcoRisk(totalOverdue: number, severelyOverdue: number) {
 }
 
 function riskBorder(level: string) {
-  if (level === "Critical") return "border-white/30";
-  if (level === "High") return "border-white/20";
-  if (level === "Moderate") return "border-white/15";
-  return "border-white/10";
+  if (level === "Critical") return "border-red-300/70";
+  if (level === "High") return "border-amber-300/70";
+  if (level === "Moderate") return "border-azure-300/70";
+  return "border-ink/[0.06]";
 }

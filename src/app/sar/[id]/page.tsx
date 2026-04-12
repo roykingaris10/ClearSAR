@@ -49,18 +49,18 @@ export default async function SarDetailPage({ params }: PageProps) {
       <div className="stagger space-y-8">
         <Link
           href="/queue"
-          className="text-xs text-white/40 hover:text-white/70"
+          className="text-xs text-ink-subtle hover:text-azure-600"
         >
-          ← Back to queue
+          &larr; Back to queue
         </Link>
 
         <header className="flex flex-wrap items-start justify-between gap-8">
           <div>
             <div className="stat-label">{reference}</div>
-            <h1 className="mt-3 text-5xl font-semibold tracking-tight">
+            <h1 className="mt-3 text-5xl font-semibold tracking-tight text-ink">
               {sar.requesterName}
             </h1>
-            <div className="mt-2 text-sm text-white/50">
+            <div className="mt-2 text-sm text-ink-muted">
               {sar.requesterEmail}
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -68,9 +68,9 @@ export default async function SarDetailPage({ params }: PageProps) {
                 Received {formatUkDate(sar.receivedDate)}
               </span>
               <span className="tag">Due {formatUkDate(sar.dueDate)}</span>
-              {sar.sarType && <span className="tag">{sar.sarType}</span>}
+              {sar.sarType && <span className="tag-azure">{sar.sarType}</span>}
               {sar.aiClassificationScore != null && (
-                <span className="tag">
+                <span className="tag-azure">
                   AI {Math.round(sar.aiClassificationScore * 100)}%
                 </span>
               )}
@@ -79,19 +79,19 @@ export default async function SarDetailPage({ params }: PageProps) {
           <div className="text-right">
             {overdue > 0 ? (
               <>
-                <div className="text-6xl font-semibold tracking-tight">
+                <div className="text-6xl font-semibold tracking-tight text-red-600">
                   {overdue}
                 </div>
-                <div className="text-[11px] uppercase tracking-wider text-white/50">
+                <div className="text-[11px] uppercase tracking-wider text-ink-subtle">
                   days overdue
                 </div>
               </>
             ) : (
               <>
-                <div className="text-6xl font-semibold tracking-tight">
+                <div className="text-6xl font-semibold tracking-tight text-azure-500">
                   {until}
                 </div>
-                <div className="text-[11px] uppercase tracking-wider text-white/50">
+                <div className="text-[11px] uppercase tracking-wider text-ink-subtle">
                   days remaining
                 </div>
               </>
@@ -114,17 +114,17 @@ export default async function SarDetailPage({ params }: PageProps) {
                   <div
                     className={`flex h-7 w-7 items-center justify-center rounded-full border text-[10px] font-semibold ${
                       done
-                        ? "border-white bg-white text-black"
+                        ? "border-azure-500 bg-azure-500 text-white"
                         : active
-                          ? "border-white text-white"
-                          : "border-white/20 text-white/30"
+                          ? "border-azure-400 text-azure-600"
+                          : "border-ink/15 text-ink-subtle"
                     }`}
                   >
                     {done ? "✓" : idx + 1}
                   </div>
                   <div
                     className={`text-center text-[10px] ${
-                      done || active ? "text-white/80" : "text-white/30"
+                      done || active ? "text-ink" : "text-ink-subtle"
                     }`}
                   >
                     {label}
@@ -147,8 +147,8 @@ export default async function SarDetailPage({ params }: PageProps) {
         {/* Original email */}
         <section className="card">
           <div className="stat-label">Original message</div>
-          <div className="mt-4 text-sm font-medium">{sar.subject}</div>
-          <pre className="mt-4 max-h-80 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-white/60">
+          <div className="mt-4 text-sm font-medium text-ink">{sar.subject}</div>
+          <pre className="mt-4 max-h-80 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-ink-muted">
             {sar.emailBody.slice(0, 5000)}
           </pre>
         </section>
@@ -159,11 +159,13 @@ export default async function SarDetailPage({ params }: PageProps) {
           <ul className="mt-6 space-y-4">
             {sar.activities.map((a) => (
               <li key={a.id} className="flex items-start gap-4">
-                <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-white/60" />
+                <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-azure-400" />
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm">{a.detail ?? a.action}</div>
-                  <div className="text-[11px] text-white/40">
-                    {formatUkDate(a.createdAt)} ·{" "}
+                  <div className="text-sm text-ink">
+                    {a.detail ?? a.action}
+                  </div>
+                  <div className="text-[11px] text-ink-subtle">
+                    {formatUkDate(a.createdAt)} &middot;{" "}
                     {new Date(a.createdAt).toLocaleTimeString("en-GB", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -173,7 +175,7 @@ export default async function SarDetailPage({ params }: PageProps) {
               </li>
             ))}
             {sar.activities.length === 0 && (
-              <li className="text-xs text-white/40">No activity yet.</li>
+              <li className="text-xs text-ink-subtle">No activity yet.</li>
             )}
           </ul>
         </section>

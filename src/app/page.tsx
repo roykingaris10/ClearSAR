@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { Logo } from "@/components/Logo";
 
 export default async function Home() {
   const session = await getSession();
@@ -8,31 +9,42 @@ export default async function Home() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col">
+    <main className="relative flex min-h-screen flex-col overflow-hidden">
+      {/* Decorative azure glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-azure-200/40 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 left-[-10%] h-[480px] w-[480px] rounded-full bg-azure-100/50 blur-3xl"
+      />
+
       {/* Top nav */}
-      <nav className="hairline-b flex items-center justify-between px-8 py-6">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-white" />
-          <span className="text-sm font-semibold tracking-tight">ClearSAR</span>
+      <nav className="glass-nav sticky top-0 z-30">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-5">
+          <Logo size="md" />
+          <a href="/api/auth/login" className="pill pill-secondary text-xs">
+            Sign in
+          </a>
         </div>
-        <a
-          href="/api/auth/login"
-          className="pill pill-secondary text-xs"
-        >
-          Sign in
-        </a>
       </nav>
 
       {/* Hero */}
-      <section className="flex flex-1 items-center justify-center px-8">
-        <div className="stagger max-w-3xl text-center">
-          <span className="tag mx-auto">For Data Protection Officers</span>
-          <h1 className="mt-8 text-6xl font-semibold tracking-tight sm:text-7xl">
-            Clear your SAR
-            <br />
-            <span className="text-white/50">backlog.</span>
+      <section className="relative flex flex-1 items-center justify-center px-8 py-20">
+        <div className="stagger relative w-full max-w-4xl text-center">
+          <span className="tag-azure mx-auto">For Data Protection Officers</span>
+
+          <h1 className="mt-8 text-6xl font-semibold tracking-tight text-ink sm:text-7xl">
+            We&apos;ve got your
+            <br className="hidden sm:block" />{" "}
+            back
+            <span className="text-ink">(</span>
+            <em className="font-bold italic text-azure-500">log</em>
+            <span className="text-ink">).</span>
           </h1>
-          <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-white/60">
+
+          <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-ink-muted">
             ClearSAR connects to your Outlook inbox, identifies Subject Access
             Requests, and drafts statutory responses for your approval. Built
             for the messy reality of a 300-email backlog.
@@ -62,32 +74,34 @@ export default async function Home() {
             </a>
           </div>
 
-          <p className="mt-8 text-xs text-white/30">
+          <p className="mt-8 text-xs text-ink-subtle">
             Article 15 · UK GDPR · 30-day statutory deadline
           </p>
         </div>
       </section>
 
       {/* Feature rail */}
-      <section className="hairline-t grid grid-cols-1 divide-y divide-white/[0.08] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-        <Feature
-          label="01"
-          title="Scan"
-          body="Every email in your inbox triaged in seconds by a UK-GDPR-trained classifier."
-        />
-        <Feature
-          label="02"
-          title="Draft"
-          body="Your approved templates, populated with case-specific facts. Review and edit freely."
-        />
-        <Feature
-          label="03"
-          title="Send"
-          body="Approve and send from your mailbox — every action logged for ICO audit."
-        />
+      <section className="relative mx-auto mb-16 w-full max-w-6xl px-8">
+        <div className="glass grid grid-cols-1 divide-y divide-ink/[0.06] overflow-hidden rounded-3xl sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <Feature
+            label="01"
+            title="Scan"
+            body="Every email in your inbox triaged in seconds by a UK-GDPR-trained classifier."
+          />
+          <Feature
+            label="02"
+            title="Draft"
+            body="Your approved templates, populated with case-specific facts. Review and edit freely."
+          />
+          <Feature
+            label="03"
+            title="Send"
+            body="Approve and send from your mailbox — every action logged for ICO audit."
+          />
+        </div>
       </section>
 
-      <footer className="hairline-t px-8 py-6 text-center text-xs text-white/30">
+      <footer className="hairline-t bg-white/40 px-8 py-6 text-center text-xs text-ink-subtle backdrop-blur">
         ClearSAR · Not legal advice · Built for DPOs
       </footer>
     </main>
@@ -105,9 +119,11 @@ function Feature({
 }) {
   return (
     <div className="p-10">
-      <div className="stat-label">{label}</div>
-      <h3 className="mt-3 text-2xl font-semibold tracking-tight">{title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-white/60">{body}</p>
+      <div className="stat-label text-azure-600">{label}</div>
+      <h3 className="mt-3 text-2xl font-semibold tracking-tight text-ink">
+        {title}
+      </h3>
+      <p className="mt-3 text-sm leading-relaxed text-ink-muted">{body}</p>
     </div>
   );
 }

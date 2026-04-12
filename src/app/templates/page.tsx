@@ -17,15 +17,20 @@ export default async function TemplatesPage() {
       <div className="stagger space-y-8">
         <header>
           <div className="stat-label">Templates</div>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">
             Your approved responses.
           </h1>
-          <p className="mt-3 max-w-xl text-sm text-white/60">
+          <p className="mt-3 max-w-xl text-sm text-ink-muted">
             Edit the templates Claude uses when drafting your SAR responses.
             Use{" "}
-            <code className="text-white/80">{"{{placeholder}}"}</code> markers
-            for variables like{" "}
-            <code className="text-white/80">{"{{requester_name}}"}</code>.
+            <code className="rounded bg-azure-50 px-1.5 py-0.5 text-azure-700">
+              {"{{placeholder}}"}
+            </code>{" "}
+            markers for variables like{" "}
+            <code className="rounded bg-azure-50 px-1.5 py-0.5 text-azure-700">
+              {"{{requester_name}}"}
+            </code>
+            .
           </p>
         </header>
 

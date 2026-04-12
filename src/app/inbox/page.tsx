@@ -12,10 +12,10 @@ export default async function InboxPage() {
       <div className="stagger space-y-8">
         <header>
           <div className="stat-label">Inbox scanner</div>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">
             Triage every email.
           </h1>
-          <p className="mt-3 max-w-xl text-sm text-white/60">
+          <p className="mt-3 max-w-xl text-sm text-ink-muted">
             ClearSAR fetches the most recent messages from your Outlook inbox
             and classifies each one as a SAR or not. Add the real ones to your
             queue with a click.

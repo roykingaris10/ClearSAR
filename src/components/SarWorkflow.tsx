@@ -95,7 +95,7 @@ export function SarWorkflow({
       <div className="flex items-center justify-between gap-4">
         <div>
           <div className="stat-label">AI response draft</div>
-          <p className="mt-2 text-sm text-white/60">
+          <p className="mt-2 text-sm text-ink-muted">
             Pick a template, let Claude fill in the details, review, and send.
           </p>
         </div>
@@ -103,7 +103,7 @@ export function SarWorkflow({
           <select
             value={template}
             onChange={(e) => setTemplate(e.target.value)}
-            className="rounded-full border border-white/15 bg-black px-4 py-2 text-xs text-white"
+            className="input-field w-auto rounded-full px-4 py-2 text-xs"
           >
             {TEMPLATE_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -124,7 +124,7 @@ export function SarWorkflow({
       <div className="mt-6 space-y-3">
         <div>
           <label className="stat-label">To</label>
-          <div className="mt-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white/70">
+          <div className="mt-2 rounded-xl border border-ink/[0.06] bg-canvas px-4 py-3 text-sm text-ink-muted">
             {requesterEmail}
           </div>
         </div>
@@ -135,7 +135,7 @@ export function SarWorkflow({
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Subject line will appear here once generated"
-            className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
+            className="input-field mt-2"
           />
         </div>
         <div>
@@ -145,25 +145,26 @@ export function SarWorkflow({
             onChange={(e) => setBody(e.target.value)}
             placeholder="Response body will appear here once generated. Edit freely before sending."
             rows={16}
-            className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm leading-relaxed text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none"
+            className="input-field mt-2 resize-none leading-relaxed"
           />
         </div>
       </div>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-white/20 bg-white/[0.02] p-3 text-xs text-white/70">
+        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
           {error}
         </div>
       )}
       {successMessage && (
-        <div className="mt-4 rounded-xl border border-white/20 bg-white/[0.02] p-3 text-xs text-white/80">
+        <div className="mt-4 rounded-xl border border-green-200 bg-green-50 p-3 text-xs text-green-700">
           {successMessage}
         </div>
       )}
 
       <div className="mt-6 flex items-center justify-between">
-        <div className="text-[11px] text-white/40">
-          Current status: <span className="text-white/70">{currentStatus}</span>
+        <div className="text-[11px] text-ink-subtle">
+          Current status:{" "}
+          <span className="text-ink">{currentStatus}</span>
         </div>
         <button
           onClick={send}

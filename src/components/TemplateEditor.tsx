@@ -50,7 +50,7 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
 
   if (!active) {
     return (
-      <div className="card text-sm text-white/60">
+      <div className="card text-sm text-ink-muted">
         No templates found. Sign out and back in to seed defaults.
       </div>
     );
@@ -63,16 +63,16 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
           <button
             key={t.id}
             onClick={() => setActiveId(t.id)}
-            className={`w-full rounded-xl px-4 py-3 text-left text-sm transition-colors ${
+            className={`w-full rounded-xl px-4 py-3 text-left text-sm transition-all ${
               t.id === activeId
-                ? "bg-white text-black"
-                : "bg-white/[0.02] text-white/70 hover:bg-white/[0.05]"
+                ? "bg-azure-500 text-white shadow-azure-glow"
+                : "bg-white/70 text-ink backdrop-blur hover:bg-white"
             }`}
           >
             <div className="font-medium">{t.name}</div>
             <div
               className={`text-[11px] ${
-                t.id === activeId ? "text-black/60" : "text-white/40"
+                t.id === activeId ? "text-white/70" : "text-ink-subtle"
               }`}
             >
               {t.type}
@@ -88,7 +88,7 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
             type="text"
             value={active.name}
             onChange={(e) => update("name", e.target.value)}
-            className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white focus:border-white/30 focus:outline-none"
+            className="input-field mt-2"
           />
         </div>
         <div>
@@ -97,7 +97,7 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
             type="text"
             value={active.subject}
             onChange={(e) => update("subject", e.target.value)}
-            className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white focus:border-white/30 focus:outline-none"
+            className="input-field mt-2"
           />
         </div>
         <div>
@@ -106,18 +106,35 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
             value={active.body}
             onChange={(e) => update("body", e.target.value)}
             rows={20}
-            className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm leading-relaxed text-white focus:border-white/30 focus:outline-none"
+            className="input-field mt-2 resize-none leading-relaxed"
           />
         </div>
         <div className="flex items-center justify-between">
-          <div className="text-[11px] text-white/40">
+          <div className="text-[11px] text-ink-subtle">
             Placeholders:{" "}
-            <code>{"{{requester_name}}"}</code>,{" "}
-            <code>{"{{received_date}}"}</code>,{" "}
-            <code>{"{{due_date}}"}</code>,{" "}
-            <code>{"{{sar_reference}}"}</code>,{" "}
-            <code>{"{{dpo_name}}"}</code>,{" "}
-            <code>{"{{organisation_name}}"}</code>
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{requester_name}}"}
+            </code>
+            ,{" "}
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{received_date}}"}
+            </code>
+            ,{" "}
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{due_date}}"}
+            </code>
+            ,{" "}
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{sar_reference}}"}
+            </code>
+            ,{" "}
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{dpo_name}}"}
+            </code>
+            ,{" "}
+            <code className="rounded bg-azure-50 px-1 text-azure-700">
+              {"{{organisation_name}}"}
+            </code>
           </div>
           <button
             onClick={save}
