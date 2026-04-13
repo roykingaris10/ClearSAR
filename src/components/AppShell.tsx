@@ -15,6 +15,7 @@ const NAV = [
   { href: "/inbox", label: "Inbox" },
   { href: "/queue", label: "Queue" },
   { href: "/templates", label: "Templates" },
+  { href: "/departments", label: "Departments" },
 ];
 
 export function AppShell({ userEmail, userName, children }: AppShellProps) {

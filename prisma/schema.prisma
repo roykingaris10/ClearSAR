@@ -19,8 +19,9 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  sars      Sar[]
-  templates Template[]
+  sars        Sar[]
+  templates   Template[]
+  departments Department[]
 }
 
 model Sar {
@@ -51,6 +52,9 @@ model Sar {
   aiDraftSubject        String?
   templateUsed          String?
 
+  // Contextual advisory (AI-generated per SAR)
+  aiAdvisory String? // JSON: validity, exemptions, vexatious, extension, fee guidance
+
   // Lifecycle timestamps
   acknowledgedAt  DateTime?
   dataRequestedAt DateTime?
@@ -66,13 +70,19 @@ model Sar {
   exemptionReason String?
   notes           String?
 
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  activities Activity[]
+  // Priority scoring for backlog triage
+  priorityScore Int? // higher = more urgent
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  activities   Activity[]
+  dataRequests DataRequest[]
+  exemptions   SarExemption[]
 
   @@index([userId])
   @@index([status])
   @@index([dueDate])
+  @@index([priorityScore])
 }
 
 model Template {
@@ -96,6 +106,72 @@ model Activity {
   sar       Sar      @relation(fields: [sarId], references: [id], onDelete: Cascade)
   action    String
   detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([sarId])
+}
+
+// ─── Phase 2: Department registry ───────────────────────────────
+
+model Department {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String  // e.g. "Human Resources", "IT", "Finance"
+  contactName  String? // person responsible for data requests
+  contactEmail String  // where data collection emails get sent
+  dataTypes    String  // JSON array: ["personnel files","disciplinary records","payroll"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dataRequests DataRequest[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+// Tracks internal data collection requests sent to departments per SAR
+model DataRequest {
+  id           String @id @default(uuid())
+  sarId        String
+  sar          Sar    @relation(fields: [sarId], references: [id], onDelete: Cascade)
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  status       String   @default("pending") // pending | sent | chased | received | overdue
+  sentAt       DateTime?
+  chasedAt     DateTime?
+  receivedAt   DateTime?
+  chaseCount   Int      @default(0)
+
+  // What was requested and what came back
+  requestNote  String?  // specific instructions for this department
+  responseNote String?  // DPO notes on what was received
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sarId])
+  @@index([departmentId])
+  @@index([status])
+}
+
+// ─── Phase 2: Exemption engine ──────────────────────────────────
+
+// Exemptions applied to a specific SAR with legal citations
+model SarExemption {
+  id    String @id @default(uuid())
+  sarId String
+  sar   Sar    @relation(fields: [sarId], references: [id], onDelete: Cascade)
+
+  exemptionCode String // e.g. "legal_privilege", "crime_prevention", "third_party"
+  legislation   String // e.g. "Schedule 2, Paragraph 19, DPA 2018"
+  description   String // human-readable: "Legal professional privilege"
+  reasoning     String // DPO's justification for applying this exemption
+  aiSuggested   Boolean @default(false) // was this suggested by AI or manually added?
+
   createdAt DateTime @default(now())
 
   @@index([sarId])
