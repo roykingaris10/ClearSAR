@@ -62,13 +62,16 @@ export async function fetchInboxMessages(
 ): Promise<InboxMessage[]> {
   const client = await getGraphClient(userId);
   const top = options.top ?? 50;
+  // Use /messages (all mail) instead of /mailFolders/inbox/messages
+  // to catch emails in Focused, Other, and any folder. Filter to inbox
+  // folder is unreliable with Focused Inbox enabled.
   const endpoint = options.mailbox
-    ? `/users/${options.mailbox}/mailFolders/inbox/messages`
-    : `/me/mailFolders/inbox/messages`;
+    ? `/users/${options.mailbox}/messages`
+    : `/me/messages`;
 
   let request = client
     .api(endpoint)
-    .select("id,subject,from,receivedDateTime,bodyPreview,body,isRead")
+    .select("id,subject,from,receivedDateTime,bodyPreview,body,isRead,parentFolderId")
     .orderby("receivedDateTime desc")
     .top(top);
 
