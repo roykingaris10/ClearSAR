@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     const tenantId = process.env.AZURE_TENANT_ID ?? "common";
     const clientId = process.env.AZURE_CLIENT_ID!;
     const clientSecret = process.env.AZURE_CLIENT_SECRET!;
-    const redirectUri = getRedirectUri();
+    const redirectUri = getRedirectUri(req.url);
 
     const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
     const params = new URLSearchParams({

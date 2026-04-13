@@ -44,11 +44,17 @@ export function getMsalClient(): ConfidentialClientApplication {
   return msalInstance;
 }
 
-export function getRedirectUri(): string {
-  return (
-    process.env.AZURE_REDIRECT_URI ??
-    "http://localhost:3000/api/auth/callback"
-  );
+export function getRedirectUri(reqUrl?: string): string {
+  // If explicitly set in env, always use that (must match Azure app registration)
+  if (process.env.AZURE_REDIRECT_URI) {
+    return process.env.AZURE_REDIRECT_URI;
+  }
+  // Auto-detect from the incoming request so any dev port works
+  if (reqUrl) {
+    const origin = new URL(reqUrl).origin;
+    return `${origin}/api/auth/callback`;
+  }
+  return "http://localhost:3000/api/auth/callback";
 }
 
 export const cryptoProvider = new CryptoProvider();
