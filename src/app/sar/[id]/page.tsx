@@ -13,6 +13,7 @@ import { SarWorkflow } from "@/components/SarWorkflow";
 import { AdvisoryPanel } from "@/components/AdvisoryPanel";
 import { ExemptionPicker } from "@/components/ExemptionPicker";
 import { DataRequestTracker } from "@/components/DataRequestTracker";
+import { ArrowLeft, Mail, History } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -71,9 +72,10 @@ export default async function SarDetailPage({ params }: PageProps) {
       <div className="stagger space-y-8">
         <Link
           href="/queue"
-          className="text-xs text-ink-subtle hover:text-azure-600"
+          className="inline-flex items-center gap-1 text-xs text-ink-subtle hover:text-azure-600"
         >
-          &larr; Back to queue
+          <ArrowLeft size={12} strokeWidth={2} />
+          Back to queue
         </Link>
 
         <header className="flex flex-wrap items-start justify-between gap-8">
@@ -190,7 +192,7 @@ export default async function SarDetailPage({ params }: PageProps) {
 
             {/* Original email */}
             <section className="card">
-              <div className="stat-label">Original message</div>
+              <div className="stat-label flex items-center gap-1.5"><Mail size={13} strokeWidth={2} />Original message</div>
               <div className="mt-4 text-sm font-medium text-ink">{sar.subject}</div>
               <pre className="mt-4 max-h-80 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-ink-muted">
                 {sar.emailBody.slice(0, 5000)}
@@ -205,7 +207,7 @@ export default async function SarDetailPage({ params }: PageProps) {
 
             {/* Activity log */}
             <section className="card">
-              <div className="stat-label">Activity</div>
+              <div className="stat-label flex items-center gap-1.5"><History size={13} strokeWidth={2} />Activity</div>
               <ul className="mt-6 space-y-4">
                 {sar.activities.map((a) => (
                   <li key={a.id} className="flex items-start gap-4">

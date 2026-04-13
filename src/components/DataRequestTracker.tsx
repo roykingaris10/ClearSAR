@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FolderSearch, Send, Bell, CheckCircle, Building2, Plus } from "lucide-react";
 
 interface DataReq {
   id: string;
@@ -126,7 +127,8 @@ export function DataRequestTracker({
   return (
     <div className="card space-y-4">
       <div className="flex items-center justify-between">
-        <div className="stat-label">
+        <div className="stat-label flex items-center gap-1.5">
+          <FolderSearch size={13} strokeWidth={2} />
           Data collection
           {requests.length > 0 && (
             <span className="ml-2 text-ink-subtle font-normal">
@@ -137,9 +139,10 @@ export function DataRequestTracker({
         {!showAdd && availableDepts.length > 0 && (
           <button
             onClick={() => setShowAdd(true)}
-            className="text-[11px] text-azure-600 hover:text-azure-700 font-medium"
+            className="flex items-center gap-1 text-[11px] text-azure-600 hover:text-azure-700 font-medium"
           >
-            + Request data
+            <Plus size={12} strokeWidth={2.5} />
+            Request data
           </button>
         )}
       </div>
@@ -160,8 +163,9 @@ export function DataRequestTracker({
           ) : (
             <button
               onClick={() => setShowAdd(true)}
-              className="pill-primary mt-3"
+              className="pill-primary mt-3 inline-flex items-center gap-1.5"
             >
+              <Send size={13} strokeWidth={2} />
               Request data from departments
             </button>
           )}
@@ -188,8 +192,9 @@ export function DataRequestTracker({
                   <button
                     onClick={() => chase(r.id)}
                     disabled={actionLoading === r.id}
-                    className="text-[10px] text-orange-600 hover:text-orange-700 font-medium px-1.5 py-0.5 rounded hover:bg-orange-50"
+                    className="flex items-center gap-0.5 text-[10px] text-orange-600 hover:text-orange-700 font-medium px-1.5 py-0.5 rounded hover:bg-orange-50"
                   >
+                    <Bell size={10} strokeWidth={2.5} />
                     {r.chaseCount > 0
                       ? `Chase again (${r.chaseCount})`
                       : "Chase"}
@@ -197,8 +202,9 @@ export function DataRequestTracker({
                   <button
                     onClick={() => markReceived(r.id)}
                     disabled={actionLoading === r.id}
-                    className="text-[10px] text-emerald-600 hover:text-emerald-700 font-medium px-1.5 py-0.5 rounded hover:bg-emerald-50"
+                    className="flex items-center gap-0.5 text-[10px] text-emerald-600 hover:text-emerald-700 font-medium px-1.5 py-0.5 rounded hover:bg-emerald-50"
                   >
+                    <CheckCircle size={10} strokeWidth={2.5} />
                     Mark received
                   </button>
                 </>

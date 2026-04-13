@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Shield, ShieldPlus, ShieldCheck, X, Sparkles } from "lucide-react";
 import { EXEMPTIONS } from "@/lib/exemptions";
 
 interface AppliedExemption {
@@ -68,13 +69,14 @@ export function ExemptionPicker({
   return (
     <div className="card space-y-4">
       <div className="flex items-center justify-between">
-        <div className="stat-label">Exemptions applied</div>
+        <div className="stat-label flex items-center gap-1.5"><Shield size={13} strokeWidth={2} />Exemptions applied</div>
         {!showPicker && available.length > 0 && (
           <button
             onClick={() => setShowPicker(true)}
-            className="text-[11px] text-azure-600 hover:text-azure-700 font-medium"
+            className="flex items-center gap-1 text-[11px] text-azure-600 hover:text-azure-700 font-medium"
           >
-            + Add exemption
+            <ShieldPlus size={12} strokeWidth={2} />
+            Add exemption
           </button>
         )}
       </div>
@@ -95,15 +97,17 @@ export function ExemptionPicker({
             <div>
               <span className="text-xs font-semibold text-ink">{ex.description}</span>
               {ex.aiSuggested && (
-                <span className="ml-1.5 text-[9px] text-azure-600 bg-azure-50 rounded-full px-1.5 py-0.5 font-medium">
+                <span className="ml-1.5 inline-flex items-center gap-0.5 text-[9px] text-azure-600 bg-azure-50 rounded-full px-1.5 py-0.5 font-medium">
+                  <Sparkles size={8} strokeWidth={2.5} />
                   AI
                 </span>
               )}
             </div>
             <button
               onClick={() => handleRemove(ex.id)}
-              className="text-[10px] text-ink-subtle hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+              className="flex items-center gap-0.5 text-[10px] text-ink-subtle hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
             >
+              <X size={11} strokeWidth={2} />
               Remove
             </button>
           </div>
@@ -156,7 +160,8 @@ export function ExemptionPicker({
           </div>
 
           <div className="flex items-center gap-3">
-            <button type="submit" disabled={saving} className="pill-primary">
+            <button type="submit" disabled={saving} className="pill-primary inline-flex items-center gap-1.5">
+              <ShieldCheck size={14} strokeWidth={2} />
               {saving ? "Applying..." : "Apply exemption"}
             </button>
             <button

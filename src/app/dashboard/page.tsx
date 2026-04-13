@@ -3,6 +3,17 @@ import { requireSessionUser } from "@/lib/require-session";
 import { prisma } from "@/lib/db";
 import { daysOverdue, formatUkDate } from "@/lib/deadlines";
 import { AppShell } from "@/components/AppShell";
+import {
+  ShieldAlert,
+  AlertTriangle,
+  FolderOpen,
+  FileCheck,
+  Send,
+  Clock,
+  ScanSearch,
+  TrendingDown,
+  BarChart3,
+} from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -81,7 +92,10 @@ export default async function DashboardPage() {
         <section className={`card ${riskBorder(icoRisk.level)}`}>
           <div className="flex items-start justify-between gap-6">
             <div>
-              <div className="stat-label">ICO risk assessment</div>
+              <div className="stat-label flex items-center gap-1.5">
+                <ShieldAlert size={13} strokeWidth={2} />
+                ICO risk assessment
+              </div>
               <div className="mt-3 text-3xl font-semibold tracking-tight text-ink">
                 {icoRisk.level} — {icoRisk.label}
               </div>
@@ -101,24 +115,26 @@ export default async function DashboardPage() {
 
         {/* Metrics grid */}
         <section className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-ink/[0.06] bg-ink/[0.06] shadow-card sm:grid-cols-4">
-          <Metric label="Open" value={open.length} />
+          <Metric label="Open" value={open.length} icon={<FolderOpen size={14} className="text-ink-subtle" />} />
           <Metric
             label="Drafts ready"
             value={sars.filter((s) => s.status === "draft_ready").length}
+            icon={<FileCheck size={14} className="text-ink-subtle" />}
           />
-          <Metric label="Sent this week" value={completedThisWeek} />
+          <Metric label="Sent this week" value={completedThisWeek} icon={<Send size={14} className="text-ink-subtle" />} />
           <Metric
             label="Most overdue"
             value={mostOverdue ? `${mostOverdue._overdue}d` : "—"}
             sub={mostOverdue?.requesterName}
             href={mostOverdue ? `/sar/${mostOverdue.id}` : undefined}
+            icon={<Clock size={14} className="text-ink-subtle" />}
           />
         </section>
 
         {/* Distribution */}
         <section className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           <div className="card">
-            <div className="stat-label">Overdue distribution</div>
+            <div className="stat-label flex items-center gap-1.5"><BarChart3 size={13} strokeWidth={2} />Overdue distribution</div>
             <div className="mt-8 space-y-5">
               {(["90+", "60-89", "30-59", "1-29"] as const).map((band) => (
                 <div key={band}>
@@ -142,7 +158,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="card">
-            <div className="stat-label">Clearance projection</div>
+            <div className="stat-label flex items-center gap-1.5"><TrendingDown size={13} strokeWidth={2} />Clearance projection</div>
             <p className="mt-3 text-sm text-ink-muted">
               Time to clear the current backlog at a steady rate.
             </p>
@@ -220,15 +236,17 @@ function Metric({
   value,
   sub,
   href,
+  icon,
 }: {
   label: string;
   value: string | number;
   sub?: string;
   href?: string;
+  icon?: React.ReactNode;
 }) {
   const inner = (
     <div className="bg-white/80 p-8 backdrop-blur">
-      <div className="stat-label">{label}</div>
+      <div className="stat-label flex items-center gap-1.5">{icon}{label}</div>
       <div className="mt-4 text-4xl font-semibold tracking-tight text-ink">
         {value}
       </div>
@@ -261,7 +279,8 @@ function EmptyState() {
         ClearSAR reads your Outlook inbox, identifies Subject Access Requests,
         and adds them to your queue.
       </p>
-      <Link href="/inbox" className="pill pill-primary mt-6 text-sm">
+      <Link href="/inbox" className="pill pill-primary mt-6 inline-flex items-center gap-1.5 text-sm">
+        <ScanSearch size={14} strokeWidth={2} />
         Open Inbox Scanner
       </Link>
     </section>

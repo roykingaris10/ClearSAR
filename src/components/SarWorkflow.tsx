@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Sparkles, Send, PenLine, FileText } from "lucide-react";
 
 interface Props {
   sarId: string;
@@ -94,7 +95,7 @@ export function SarWorkflow({
     <section className="card">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <div className="stat-label">AI response draft</div>
+          <div className="stat-label flex items-center gap-1.5"><PenLine size={13} strokeWidth={2} />AI response draft</div>
           <p className="mt-2 text-sm text-ink-muted">
             Pick a template, let Claude fill in the details, review, and send.
           </p>
@@ -114,8 +115,9 @@ export function SarWorkflow({
           <button
             onClick={generate}
             disabled={generating}
-            className="pill pill-secondary text-xs disabled:opacity-50"
+            className="pill pill-secondary inline-flex items-center gap-1.5 text-xs disabled:opacity-50"
           >
+            <Sparkles size={13} strokeWidth={2} />
             {generating ? "Drafting..." : "Generate draft"}
           </button>
         </div>
@@ -169,8 +171,9 @@ export function SarWorkflow({
         <button
           onClick={send}
           disabled={sending || !subject || !body}
-          className="pill pill-primary text-sm disabled:opacity-50"
+          className="pill pill-primary inline-flex items-center gap-1.5 text-sm disabled:opacity-50"
         >
+          <Send size={14} strokeWidth={2} />
           {sending ? "Sending..." : "Approve & send"}
         </button>
       </div>

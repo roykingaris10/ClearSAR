@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Save, FileText, Check, Code2 } from "lucide-react";
 
 interface Template {
   id: string;
@@ -69,7 +70,7 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
                 : "bg-white/70 text-ink backdrop-blur hover:bg-white"
             }`}
           >
-            <div className="font-medium">{t.name}</div>
+            <div className="flex items-center gap-1.5 font-medium"><FileText size={13} strokeWidth={2} />{t.name}</div>
             <div
               className={`text-[11px] ${
                 t.id === activeId ? "text-white/70" : "text-ink-subtle"
@@ -110,7 +111,8 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
           />
         </div>
         <div className="flex items-center justify-between">
-          <div className="text-[11px] text-ink-subtle">
+          <div className="flex items-start gap-1 text-[11px] text-ink-subtle">
+            <Code2 size={11} strokeWidth={2} className="mt-0.5 shrink-0" />
             Placeholders:{" "}
             <code className="rounded bg-azure-50 px-1 text-azure-700">
               {"{{requester_name}}"}
@@ -139,13 +141,13 @@ export function TemplateEditor({ initial }: { initial: Template[] }) {
           <button
             onClick={save}
             disabled={savingId === active.id}
-            className="pill pill-primary text-xs disabled:opacity-50"
+            className="pill pill-primary inline-flex items-center gap-1.5 text-xs disabled:opacity-50"
           >
             {savingId === active.id
               ? "Saving..."
               : savedId === active.id
-                ? "Saved"
-                : "Save template"}
+                ? <><Check size={13} strokeWidth={2.5} />Saved</>
+                : <><Save size={13} strokeWidth={2} />Save template</>}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ScanSearch, Plus, X, Check, Mail } from "lucide-react";
 
 interface ScanResult {
   message: {
@@ -98,7 +99,8 @@ export function InboxScanner() {
     <div className="space-y-6">
       <div className="card flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="text-sm font-medium text-ink">
+          <div className="flex items-center gap-2 text-sm font-medium text-ink">
+            <Mail size={15} strokeWidth={2} className="text-azure-500" />
             Connected to your Outlook
           </div>
           {results && (
@@ -126,8 +128,9 @@ export function InboxScanner() {
           <button
             onClick={scan}
             disabled={loading}
-            className="pill pill-primary text-sm disabled:opacity-50"
+            className="pill pill-primary inline-flex items-center gap-1.5 text-sm disabled:opacity-50"
           >
+            <ScanSearch size={14} strokeWidth={2} />
             {loading ? "Scanning..." : "Scan inbox"}
           </button>
         </div>
@@ -200,21 +203,24 @@ export function InboxScanner() {
                 </div>
                 <div className="flex shrink-0 flex-col gap-2">
                   {added ? (
-                    <span className="pill border border-azure-200 bg-azure-50 text-xs text-azure-700">
-                      Added to queue
+                    <span className="pill inline-flex items-center gap-1 border border-azure-200 bg-azure-50 text-xs text-azure-700">
+                      <Check size={12} strokeWidth={2.5} />
+                      Added
                     </span>
                   ) : (
                     <button
                       onClick={() => addToQueue(r)}
-                      className="pill pill-primary text-xs"
+                      className="pill pill-primary inline-flex items-center gap-1 text-xs"
                     >
+                      <Plus size={13} strokeWidth={2.5} />
                       Add to queue
                     </button>
                   )}
                   <button
                     onClick={() => dismiss(r.message.id)}
-                    className="pill pill-ghost text-xs"
+                    className="pill pill-ghost inline-flex items-center gap-1 text-xs"
                   >
+                    <X size={13} strokeWidth={2} />
                     Dismiss
                   </button>
                 </div>

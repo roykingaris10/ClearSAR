@@ -1,6 +1,17 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
+import {
+  ScanSearch,
+  PenLine,
+  Send,
+  Calendar,
+  Scale,
+  ClipboardCheck,
+  ShieldCheck,
+  LogIn,
+  ArrowRight,
+} from "lucide-react";
 
 export default async function Home() {
   const session = await getSession();
@@ -14,7 +25,8 @@ export default async function Home() {
       <nav className="glass-nav sticky top-0 z-30">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-8 py-5">
           <Logo size="md" />
-          <a href="/api/auth/login" className="pill pill-secondary text-xs">
+          <a href="/api/auth/login" className="pill pill-secondary inline-flex items-center gap-1.5 text-xs">
+            <LogIn size={13} strokeWidth={2} />
             Sign in
           </a>
         </div>
@@ -40,23 +52,10 @@ export default async function Home() {
           <div className="mt-10 flex items-center gap-4">
             <a
               href="/api/auth/login"
-              className="pill pill-primary px-5 py-2.5"
+              className="pill pill-primary inline-flex items-center gap-2 px-5 py-2.5"
             >
               Connect Outlook
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-              >
-                <path
-                  d="M6 3.5l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <ArrowRight size={15} strokeWidth={2} />
             </a>
             <span className="text-[13px] text-ink-subtle">
               UK GDPR &middot; 30-day deadline &middot; ICO-ready audit trail
@@ -73,16 +72,19 @@ export default async function Home() {
             number="1"
             title="Scan"
             body="Connect your Outlook. Every email gets triaged by a UK-GDPR-trained classifier in seconds."
+            icon={<ScanSearch size={16} strokeWidth={2} />}
           />
           <Step
             number="2"
             title="Draft"
             body="Your approved templates, populated with case-specific facts. Review and edit before anything leaves."
+            icon={<PenLine size={16} strokeWidth={2} />}
           />
           <Step
             number="3"
             title="Send"
             body="Approve and send from your mailbox. Every action logged and timestamped for ICO audit."
+            icon={<Send size={16} strokeWidth={2} />}
           />
         </div>
       </section>
@@ -90,10 +92,10 @@ export default async function Home() {
       {/* Trust strip */}
       <section className="hairline-t hairline-b bg-white/40 backdrop-blur">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-6 px-8 py-8">
-          <Stat value="30 days" label="Statutory deadline" />
-          <Stat value="Art. 15" label="UK GDPR" />
-          <Stat value="100%" label="Audit trail" />
-          <Stat value="0" label="Emails sent without your approval" />
+          <Stat value="30 days" label="Statutory deadline" icon={<Calendar size={14} strokeWidth={2} className="text-azure-500" />} />
+          <Stat value="Art. 15" label="UK GDPR" icon={<Scale size={14} strokeWidth={2} className="text-azure-500" />} />
+          <Stat value="100%" label="Audit trail" icon={<ClipboardCheck size={14} strokeWidth={2} className="text-azure-500" />} />
+          <Stat value="0" label="Emails sent without approval" icon={<ShieldCheck size={14} strokeWidth={2} className="text-azure-500" />} />
         </div>
       </section>
 
@@ -108,15 +110,17 @@ function Step({
   number,
   title,
   body,
+  icon,
 }: {
   number: string;
   title: string;
   body: string;
+  icon: React.ReactNode;
 }) {
   return (
     <div className="card group">
-      <div className="mb-4 flex h-8 w-8 items-center justify-center rounded-lg bg-azure-50 text-[13px] font-semibold text-azure-600">
-        {number}
+      <div className="mb-4 flex h-8 w-8 items-center justify-center rounded-lg bg-azure-50 text-azure-600">
+        {icon}
       </div>
       <h3 className="text-lg font-medium tracking-tight text-ink">{title}</h3>
       <p className="mt-2 text-[14px] leading-relaxed text-ink-muted">{body}</p>
@@ -124,10 +128,10 @@ function Step({
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Stat({ value, label, icon }: { value: string; label: string; icon: React.ReactNode }) {
   return (
     <div>
-      <div className="text-lg font-medium tracking-tight text-ink">{value}</div>
+      <div className="flex items-center gap-1.5 text-lg font-medium tracking-tight text-ink">{icon}{value}</div>
       <div className="text-[12px] text-ink-subtle">{label}</div>
     </div>
   );

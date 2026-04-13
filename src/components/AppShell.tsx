@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Inbox,
+  ClipboardList,
+  FileText,
+  Building2,
+  LogOut,
+} from "lucide-react";
 import { Logo } from "./Logo";
 
 interface AppShellProps {
@@ -11,11 +19,11 @@ interface AppShellProps {
 }
 
 const NAV = [
-  { href: "/dashboard", label: "Overview" },
-  { href: "/inbox", label: "Inbox" },
-  { href: "/queue", label: "Queue" },
-  { href: "/templates", label: "Templates" },
-  { href: "/departments", label: "Departments" },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/inbox", label: "Inbox", icon: Inbox },
+  { href: "/queue", label: "Queue", icon: ClipboardList },
+  { href: "/templates", label: "Templates", icon: FileText },
+  { href: "/departments", label: "Departments", icon: Building2 },
 ];
 
 export function AppShell({ userEmail, userName, children }: AppShellProps) {
@@ -33,16 +41,18 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
             {NAV.map((item) => {
               const active =
                 pathname === item.href || pathname?.startsWith(item.href + "/");
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all ${
+                  className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all ${
                     active
                       ? "bg-ink text-white"
                       : "text-ink-muted hover:text-ink hover:bg-black/[0.04]"
                   }`}
                 >
+                  <Icon size={14} strokeWidth={2} />
                   {item.label}
                 </Link>
               );
@@ -58,8 +68,9 @@ export function AppShell({ userEmail, userName, children }: AppShellProps) {
             </div>
             <a
               href="/api/auth/logout"
-              className="pill-ghost text-[13px]"
+              className="pill-ghost flex items-center gap-1.5 text-[13px]"
             >
+              <LogOut size={13} strokeWidth={2} />
               Sign out
             </a>
           </div>

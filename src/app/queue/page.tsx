@@ -3,6 +3,7 @@ import { requireSessionUser } from "@/lib/require-session";
 import { prisma } from "@/lib/db";
 import { daysOverdue, daysUntilDue, formatUkDate } from "@/lib/deadlines";
 import { AppShell } from "@/components/AppShell";
+import { ScanSearch, AlertCircle, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,8 @@ export default async function QueuePage() {
               {sars.length} request{sars.length === 1 ? "" : "s"}
             </h1>
           </div>
-          <Link href="/inbox" className="pill pill-secondary text-sm">
+          <Link href="/inbox" className="pill pill-secondary inline-flex items-center gap-1.5 text-sm">
+            <ScanSearch size={14} strokeWidth={2} />
             Scan more
           </Link>
         </header>
@@ -34,7 +36,8 @@ export default async function QueuePage() {
             <p className="text-sm text-ink-muted">
               Your queue is empty. Scan your inbox to add SARs.
             </p>
-            <Link href="/inbox" className="pill pill-primary mt-4 text-sm">
+            <Link href="/inbox" className="pill pill-primary mt-4 inline-flex items-center gap-1.5 text-sm">
+              <ScanSearch size={14} strokeWidth={2} />
               Open Inbox Scanner
             </Link>
           </div>
@@ -77,11 +80,13 @@ export default async function QueuePage() {
                     </div>
                     <div className="col-span-2 text-right">
                       {isOverdue ? (
-                        <span className="text-sm font-medium text-red-600">
+                        <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600">
+                          <AlertCircle size={12} strokeWidth={2.5} />
                           {overdue}d overdue
                         </span>
                       ) : (
-                        <span className="text-sm text-ink-muted">
+                        <span className="inline-flex items-center gap-1 text-sm text-ink-muted">
+                          <Clock size={12} strokeWidth={2} />
                           {until}d remaining
                         </span>
                       )}

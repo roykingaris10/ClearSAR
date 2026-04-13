@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Building2, Plus, Pencil, Trash2, Database } from "lucide-react";
 
 interface Department {
   id: string;
@@ -128,10 +129,12 @@ export function DepartmentRegistry({ initial }: { initial: Department[] }) {
           <p className="mt-1 text-xs text-ink-subtle">
             Add departments that hold personal data — HR, IT, Finance, etc.
           </p>
+          <Building2 size={28} strokeWidth={1.5} className="mx-auto mb-3 text-ink-subtle" />
           <button
             onClick={() => setShowForm(true)}
-            className="pill-primary mt-6"
+            className="pill-primary mt-6 inline-flex items-center gap-1.5"
           >
+            <Plus size={14} strokeWidth={2.5} />
             Add first department
           </button>
         </div>
@@ -156,14 +159,16 @@ export function DepartmentRegistry({ initial }: { initial: Department[] }) {
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => startEdit(dept)}
-                    className="text-[11px] text-ink-subtle hover:text-azure-600 px-1.5 py-0.5 rounded hover:bg-azure-50"
+                    className="flex items-center gap-0.5 text-[11px] text-ink-subtle hover:text-azure-600 px-1.5 py-0.5 rounded hover:bg-azure-50"
                   >
+                    <Pencil size={10} strokeWidth={2} />
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(dept.id)}
-                    className="text-[11px] text-ink-subtle hover:text-red-600 px-1.5 py-0.5 rounded hover:bg-red-50"
+                    className="flex items-center gap-0.5 text-[11px] text-ink-subtle hover:text-red-600 px-1.5 py-0.5 rounded hover:bg-red-50"
                   >
+                    <Trash2 size={10} strokeWidth={2} />
                     Remove
                   </button>
                 </div>
@@ -180,7 +185,8 @@ export function DepartmentRegistry({ initial }: { initial: Department[] }) {
               )}
 
               {dept.requestCount > 0 && (
-                <div className="mt-3 text-[10px] text-ink-subtle">
+                <div className="mt-3 flex items-center gap-1 text-[10px] text-ink-subtle">
+                  <Database size={9} strokeWidth={2} />
                   {dept.requestCount} data request{dept.requestCount !== 1 ? "s" : ""}
                 </div>
               )}
@@ -191,9 +197,10 @@ export function DepartmentRegistry({ initial }: { initial: Department[] }) {
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="card flex items-center justify-center border-2 border-dashed border-ink/10 hover:border-azure-300 hover:bg-azure-50/30 transition-colors min-h-[120px]"
+              className="card flex flex-col items-center justify-center gap-2 border-2 border-dashed border-ink/10 hover:border-azure-300 hover:bg-azure-50/30 transition-colors min-h-[120px]"
             >
-              <span className="text-sm text-ink-subtle">+ Add department</span>
+              <Plus size={18} strokeWidth={1.5} className="text-ink-subtle" />
+              <span className="text-sm text-ink-subtle">Add department</span>
             </button>
           )}
         </div>

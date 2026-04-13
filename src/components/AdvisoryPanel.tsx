@@ -1,6 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Sparkles,
+  RefreshCw,
+  Gauge,
+  Layers,
+  CheckCircle,
+  AlertCircle,
+  AlertTriangle,
+  Clock,
+  Coins,
+  Shield,
+  Building2,
+} from "lucide-react";
 
 interface Advisory {
   validity: { is_valid: boolean; issues: string[]; guidance: string };
@@ -46,7 +59,7 @@ export function AdvisoryPanel({
   if (!advisory) {
     return (
       <div className="card">
-        <div className="stat-label">AI Advisory</div>
+        <div className="stat-label flex items-center gap-1.5"><Sparkles size={13} strokeWidth={2} />AI Advisory</div>
         <div className="mt-4 text-center py-8">
           <p className="text-sm text-ink-subtle">
             Generate contextual guidance for this SAR — validity checks,
@@ -58,8 +71,9 @@ export function AdvisoryPanel({
           <button
             onClick={generate}
             disabled={loading}
-            className="pill-primary mt-4"
+            className="pill-primary mt-4 inline-flex items-center gap-1.5"
           >
+            <Sparkles size={14} strokeWidth={2} />
             {loading ? "Analysing..." : "Generate advisory"}
           </button>
         </div>
@@ -76,12 +90,13 @@ export function AdvisoryPanel({
   return (
     <div className="card space-y-6">
       <div className="flex items-center justify-between">
-        <div className="stat-label">AI Advisory</div>
+        <div className="stat-label flex items-center gap-1.5"><Sparkles size={13} strokeWidth={2} />AI Advisory</div>
         <button
           onClick={generate}
           disabled={loading}
-          className="text-[11px] text-ink-subtle hover:text-azure-600 transition-colors"
+          className="flex items-center gap-1 text-[11px] text-ink-subtle hover:text-azure-600 transition-colors"
         >
+          <RefreshCw size={11} strokeWidth={2} />
           {loading ? "Regenerating..." : "Regenerate"}
         </button>
       </div>
@@ -95,8 +110,8 @@ export function AdvisoryPanel({
           <div className="text-2xl font-semibold text-ink">
             {advisory.priorityScore}
           </div>
-          <div className="text-[10px] uppercase tracking-wider text-ink-subtle">
-            Priority
+          <div className="mt-1 flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider text-ink-subtle">
+            <Gauge size={10} strokeWidth={2} />Priority
           </div>
         </div>
         <div className="rounded-lg bg-canvas px-3 py-2.5 text-center">
@@ -105,14 +120,15 @@ export function AdvisoryPanel({
           >
             {advisory.complexity}
           </span>
-          <div className="mt-1 text-[10px] uppercase tracking-wider text-ink-subtle">
-            Complexity
+          <div className="mt-1 flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider text-ink-subtle">
+            <Layers size={10} strokeWidth={2} />Complexity
           </div>
         </div>
         <div className="rounded-lg bg-canvas px-3 py-2.5 text-center">
           <div
-            className={`text-lg font-semibold ${advisory.validity.is_valid ? "text-emerald-600" : "text-red-600"}`}
+            className={`flex items-center justify-center gap-1 text-lg font-semibold ${advisory.validity.is_valid ? "text-emerald-600" : "text-red-600"}`}
           >
+            {advisory.validity.is_valid ? <CheckCircle size={16} strokeWidth={2} /> : <AlertCircle size={16} strokeWidth={2} />}
             {advisory.validity.is_valid ? "Valid" : "Issues"}
           </div>
           <div className="text-[10px] uppercase tracking-wider text-ink-subtle">
@@ -124,7 +140,8 @@ export function AdvisoryPanel({
       {/* Validity issues */}
       {advisory.validity.issues.length > 0 && (
         <div className="rounded-lg bg-amber-50 p-3">
-          <div className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
+          <div className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
+            <AlertTriangle size={12} strokeWidth={2} />
             Validity issues
           </div>
           <ul className="mt-2 space-y-1">
@@ -143,7 +160,8 @@ export function AdvisoryPanel({
       <div className="space-y-3">
         {advisory.vexatious.likely && (
           <div className="rounded-lg bg-red-50 p-3">
-            <div className="text-[11px] font-semibold text-red-700 uppercase tracking-wider">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-red-700 uppercase tracking-wider">
+              <AlertTriangle size={12} strokeWidth={2} />
               Potentially vexatious
             </div>
             <p className="mt-1 text-xs text-red-700">{advisory.vexatious.reasoning}</p>
@@ -152,7 +170,8 @@ export function AdvisoryPanel({
 
         {advisory.extension.recommended && (
           <div className="rounded-lg bg-blue-50 p-3">
-            <div className="text-[11px] font-semibold text-blue-700 uppercase tracking-wider">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-blue-700 uppercase tracking-wider">
+              <Clock size={12} strokeWidth={2} />
               Extension recommended
             </div>
             <p className="mt-1 text-xs text-blue-700">{advisory.extension.reasoning}</p>
@@ -161,7 +180,8 @@ export function AdvisoryPanel({
 
         {advisory.fee.chargeable && (
           <div className="rounded-lg bg-violet-50 p-3">
-            <div className="text-[11px] font-semibold text-violet-700 uppercase tracking-wider">
+            <div className="flex items-center gap-1 text-[11px] font-semibold text-violet-700 uppercase tracking-wider">
+              <Coins size={12} strokeWidth={2} />
               Fee chargeable
             </div>
             <p className="mt-1 text-xs text-violet-700">{advisory.fee.reasoning}</p>
@@ -172,7 +192,8 @@ export function AdvisoryPanel({
       {/* Suggested exemptions */}
       {advisory.suggestedExemptions.length > 0 && (
         <div>
-          <div className="text-[11px] font-semibold text-ink-muted uppercase tracking-wider">
+          <div className="flex items-center gap-1 text-[11px] font-semibold text-ink-muted uppercase tracking-wider">
+            <Shield size={12} strokeWidth={2} />
             Suggested exemptions
           </div>
           <div className="mt-2 space-y-2">
@@ -198,7 +219,8 @@ export function AdvisoryPanel({
       {/* Suggested departments */}
       {advisory.suggestedDepartments.length > 0 && (
         <div>
-          <div className="text-[11px] font-semibold text-ink-muted uppercase tracking-wider">
+          <div className="flex items-center gap-1 text-[11px] font-semibold text-ink-muted uppercase tracking-wider">
+            <Building2 size={12} strokeWidth={2} />
             Recommended departments
           </div>
           <div className="mt-2 flex flex-wrap gap-1.5">
